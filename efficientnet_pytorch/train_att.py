@@ -91,12 +91,12 @@ def main():
 
     model_name_self = model_name[0:15]
     model = EfficientNet.from_pretrained(model_name_self, num_classes=num_classes).to(device)
-    load_pretrained_weights(model, model_name_self, weights_path=None, advprop=False)
+    #load_pretrained_weights(model, model_name_self, weights_path=None, advprop=False)
     #model.load_state_dict(torch.load("./weights/AID_0.8_0.1_0.1_0_efficientnet-b0.pkl")).to(device)
     # model = torch.load("./weights/AID_0.8_0.1_0.1_1_efficientnet-b0.pkl").to(device)
 
-    #criterion = nn.CrossEntropyLoss().to(device)
-    criterion = LabelSmoothCELoss().to(device)
+    criterion = nn.CrossEntropyLoss().to(device)
+    #criterion = LabelSmoothCELoss().to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
     print(model)
 
@@ -157,10 +157,6 @@ def train_one_epoch(model, optimizer, criterion, epoch, epoches, iter_number, lo
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-
-        # for param in criterion.parameters():
-        #     param.grad.data *= (1. / weight_cent)
-        # optimizer.step()
 
         # 每10次输出一次loss和acc
         if iter_number % iter_number_print == 0:
